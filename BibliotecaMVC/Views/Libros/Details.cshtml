@@ -1,0 +1,25 @@
+﻿@model BibliotecaMVC.Models.Libro
+
+@{
+    ViewData["Title"] = "Detalles del Libro";
+}
+
+<h1>@Model.Titulo</h1>
+
+<dl class="row">
+    <dt>Autor</dt>
+    <dd>@Model.Autor</dd>
+
+    <dt>Categoría</dt>
+    <dd>@Model.Categoria</dd>
+
+    <dt>Precio</dt>
+    <dd>$@Model.Precio</dd>
+
+    <dt>Disponibilidad</dt>
+    <dd>@(Model.Disponible ? "Disponible" : "Prestado")</dd>
+
+    <img src="~/images/libros/@Model.ImagenUrl" style="max-width: 300px;" class="mb-3" alt="@Model.Titulo" />
+</dl>
+
+<a asp-action="Index" class="btn btn-primary">Volver al listado</a>

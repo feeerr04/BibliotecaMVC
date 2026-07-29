@@ -1,32 +1,25 @@
-﻿@using BibliotecaMVC.Models
+﻿@model IEnumerable<BibliotecaMVC.Models.Libro>
 
 @{
-    List<Libro> libros = ViewBag.Libros;
+    ViewData["Title"] = "Listado de Libros";
 }
 
-<h2>Catálogo de Libros</h2>
+<h1>@ViewData["Title"]</h1>
+<p>Hay @Model.Count() libros registrados.</p>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Autor</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Disponibilidad</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var libro in libros)
-        {
-            <tr>
-                <td>@libro.ID</td>
-                <td>@libro.Titulo</td>
-                <td>@libro.Autor</td>
-                <td>@libro.Categoria</td>
-                <td>$@libro.Precio</td>
-                <td>
+<a asp-action="Create" class="btn btn-primary mb-3">Nuevo libro +</a>
+
+<div class="row">
+    @foreach (var libro in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <img src="~/images/libros/@libro.ImagenUrl" class="card-img-top" alt="@libro.Titulo" style="height: 250px; object-fit: cover;" />
+                <div class="card-body">
+                    <h5>@libro.Titulo</h5>
+                    <h6>@libro.Autor</h6>
+                    <p>@libro.Categoria - $@libro.Precio</p>
+
                     @if (libro.Disponible)
                     {
                         <span class="badge bg-success">Disponible</span>
@@ -35,8 +28,14 @@
                     {
                         <span class="badge bg-danger">Prestado</span>
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+                    <div class="mt-2">
+                        <a asp-action="Details" asp-route-id="@libro.Id">Ver</a> |
+                        <a asp-action="Edit" asp-route-id="@libro.Id">Editar</a> |
+                        <a asp-action="Delete" asp-route-id="@libro.Id">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
