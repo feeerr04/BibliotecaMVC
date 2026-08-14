@@ -26,7 +26,7 @@ namespace BibliotecaMVC.Controllers
             return View();
         }
 
-        public IActionResult AcercaDe()
+        public IActionResult About()
         {
             return View();
         }

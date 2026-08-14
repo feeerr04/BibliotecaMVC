@@ -1,8 +1,145 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <span class="badge bg-primary mb-2">Sistema de Biblioteca</span>
+            <h1 class="display-4 fw-bold">
+                BibliotecaMVC
+            </h1>
+            <p class="lead">
+                Encuentra, gestiona y explora nuestro catálogo de libros y autores
+                desde un solo lugar. Una plataforma pensada para facilitar el acceso
+                al conocimiento.
+            </p>
+            <a asp-controller="Home" asp-action="About" class="btn btn-primary btn-lg me-2">Conocer más</a>
+            <a asp-controller="Libros" asp-action="Index" class="btn btn-outline-primary btn-lg">Ver catálogo</a>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="https://picsum.photos/500/350" class="img-fluid rounded shadow" alt="Biblioteca">
+        </div>
+    </div>
+</div>
 
-<div class="text-center">
-    <h1>Sistema de Gestión de Biblioteca</h1>
-    <p>Bienvenido al sistema desarrollado con ASP.Net Core MVC.</p>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Libros Destacados</h2>
+    <div id="carouselLibros" class="carousel slide shadow rounded" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselLibros" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselLibros" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselLibros" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://picsum.photos/900/300?random=1" class="d-block w-100" alt="Libro destacado 1" style="max-height: 350px; object-fit: cover;">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                    <h5>Clean Code</h5>
+                    <p>Un clásico imprescindible para todo desarrollador.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://picsum.photos/900/300?random=2" class="d-block w-100" alt="Libro destacado 2" style="max-height: 350px; object-fit: cover;">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                    <h5>The Pragmatic Programmer</h5>
+                    <p>Consejos prácticos para mejorar como programador.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://picsum.photos/900/300?random=3" class="d-block w-100" alt="Libro destacado 3" style="max-height: 350px; object-fit: cover;">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                    <h5>Cien Años de Soledad</h5>
+                    <p>Una obra maestra de la literatura latinoamericana.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselLibros" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselLibros" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Servicios de la Biblioteca</h2>
+    <div class="row">
+        <!--Servicio 1-->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <img src="https://picsum.photos/200/101" class="card-img-top" alt="Catálogo de libros">
+                <div class="card-body">
+                    <h5 class="card-title">Catálogo de Libros</h5>
+                    <p class="card-text">
+                        Consulta el listado completo de libros disponibles, filtrados
+                        por categoría, autor y disponibilidad.
+                    </p>
+                    <a asp-controller="Libros" asp-action="Index" class="btn btn-sm btn-primary">Ver libros</a>
+                </div>
+            </div>
+        </div>
+
+        <!--Servicio 2-->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <img src="https://picsum.photos/200/102" class="card-img-top" alt="Autores">
+                <div class="card-body">
+                    <h5 class="card-title">Autores Registrados</h5>
+                    <p class="card-text">
+                        Explora la información de los autores disponibles en nuestro
+                        sistema, con detalles de nacionalidad y biografía.
+                    </p>
+                    <a asp-controller="Autores" asp-action="Index" class="btn btn-sm btn-primary">Ver autores</a>
+                </div>
+            </div>
+        </div>
+
+        <!--Servicio 3-->
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <img src="https://picsum.photos/200/103" class="card-img-top" alt="Sobre la biblioteca">
+                <div class="card-body">
+                    <h5 class="card-title">Sobre Nosotros</h5>
+                    <p class="card-text">
+                        Conoce más acerca de nuestra misión, visión y el propósito
+                        detrás de este sistema de biblioteca virtual.
+                    </p>
+                    <a asp-controller="Home" asp-action="About" class="btn btn-sm btn-primary">Conocer más</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <h2 class="text-primary fw-bold">500+</h2>
+            <p>Libros disponibles</p>
+        </div>
+
+        <div class="col-md-4">
+            <h2 class="text-primary fw-bold">120+</h2>
+            <p>Autores Registrados</p>
+        </div>
+
+        <div class="col-md-4">
+            <h2 class="text-primary fw-bold">25+</h2>
+            <p>Categorías literarias</p>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="bg-primary text-white rounded p-5 text-center">
+        <h2>Explora nuestra Biblioteca Virtual</h2>
+        <p>
+            BibliotecaMVC te permite llevar el control de libros, autores y préstamos
+            de forma sencilla y organizada. Ya seas estudiante, docente o lector
+            frecuente, encontrarás todo lo que necesitas para gestionar tu experiencia
+            de lectura desde cualquier dispositivo.
+        </p>
+
+        <a asp-controller="Home" asp-action="About" class="btn btn-outline-light">Acerca de la Biblioteca</a>
+    </div>
 </div>
