@@ -1,6 +1,6 @@
 ﻿<div class="container mt-5">
-    <div class="row align-items-center">
-        <div class="col-md-6">
+    <div class="hero-flex">
+        <div class="hero-text">
             <span class="badge bg-primary mb-2">Sistema de Biblioteca</span>
             <h1 class="display-4 fw-bold">
                 BibliotecaMVC
@@ -13,7 +13,7 @@
             <a asp-controller="Home" asp-action="About" class="btn btn-primary btn-lg me-2">Conocer más</a>
             <a asp-controller="Libros" asp-action="Index" class="btn btn-outline-primary btn-lg">Ver catálogo</a>
         </div>
-        <div class="col-md-6 text-center">
+        <div class="hero-image">
             <img src="https://picsum.photos/500/350" class="img-fluid rounded shadow" alt="Biblioteca">
         </div>
     </div>
@@ -62,68 +62,28 @@
 </div>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Servicios de la Biblioteca</h2>
-    <div class="row">
-        <!--Servicio 1-->
-        <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <img src="https://picsum.photos/200/101" class="card-img-top" alt="Catálogo de libros">
-                <div class="card-body">
-                    <h5 class="card-title">Catálogo de Libros</h5>
-                    <p class="card-text">
-                        Consulta el listado completo de libros disponibles, filtrados
-                        por categoría, autor y disponibilidad.
-                    </p>
-                    <a asp-controller="Libros" asp-action="Index" class="btn btn-sm btn-primary">Ver libros</a>
-                </div>
-            </div>
-        </div>
-
-        <!--Servicio 2-->
-        <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <img src="https://picsum.photos/200/102" class="card-img-top" alt="Autores">
-                <div class="card-body">
-                    <h5 class="card-title">Autores Registrados</h5>
-                    <p class="card-text">
-                        Explora la información de los autores disponibles en nuestro
-                        sistema, con detalles de nacionalidad y biografía.
-                    </p>
-                    <a asp-controller="Autores" asp-action="Index" class="btn btn-sm btn-primary">Ver autores</a>
-                </div>
-            </div>
-        </div>
-
-        <!--Servicio 3-->
-        <div class="col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <img src="https://picsum.photos/200/103" class="card-img-top" alt="Sobre la biblioteca">
-                <div class="card-body">
-                    <h5 class="card-title">Sobre Nosotros</h5>
-                    <p class="card-text">
-                        Conoce más acerca de nuestra misión, visión y el propósito
-                        detrás de este sistema de biblioteca virtual.
-                    </p>
-                    <a asp-controller="Home" asp-action="About" class="btn btn-sm btn-primary">Conocer más</a>
-                </div>
-            </div>
-        </div>
+    <h2 class="text-center mb-4">Explora Nuestra Biblioteca Virtual</h2>
+    <div class="grid-servicios">
+        @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/101", Text = "Consulta el listado completo de libros disponibles, filtrados por categoría, autor y disponibilidad." })
+        @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/102", Text = "Explora la información de los autores disponibles en nuestro sistema, con detalles de nacionalidad y biografía." })
+        @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/103", Text = "Consulta la disponibilidad de préstamos y el estado actual de cada ejemplar del catálogo." })
+        @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/104", Text = "Conoce más acerca de nuestra misión, visión y el propósito detrás de este sistema de biblioteca virtual." })
     </div>
 </div>
 
 <div class="container mt-5">
-    <div class="row text-center">
-        <div class="col-md-4">
+    <div class="stats-flex">
+        <div class="stat-item">
             <h2 class="text-primary fw-bold">500+</h2>
             <p>Libros disponibles</p>
         </div>
 
-        <div class="col-md-4">
+        <div class="stat-item">
             <h2 class="text-primary fw-bold">120+</h2>
             <p>Autores Registrados</p>
         </div>
 
-        <div class="col-md-4">
+        <div class="stat-item">
             <h2 class="text-primary fw-bold">25+</h2>
             <p>Categorías literarias</p>
         </div>

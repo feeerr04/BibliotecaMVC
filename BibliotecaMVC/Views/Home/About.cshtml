@@ -21,28 +21,17 @@
         </p>
 
         <h2>¿Qué ofrecemos?</h2>
-        <ul class="about-list">
-            <li>Consulta rápida del catálogo de libros disponibles.</li>
-            <li>Registro y administración de autores.</li>
-            <li>Control de disponibilidad y préstamos.</li>
-            <li>Interfaz adaptable a computadoras, tablets y celulares.</li>
-        </ul>
+        <div class="grid-servicios">
+            @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/201", Text = "Consulta rápida del catálogo de libros disponibles." })
+            @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/202", Text = "Registro y administración de autores." })
+            @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/203", Text = "Control de disponibilidad y préstamos." })
+            @await Html.PartialAsync("_ServiceCard", new BibliotecaMVC.Models.ServiceCard { ImageUrl = "https://picsum.photos/200/204", Text = "Interfaz adaptable a computadoras, tablets y celulares." })
+        </div>
     </article>
 
-    <aside class="about-info">
-        <h3>Misión</h3>
-        <p>
-            Facilitar el acceso a la información bibliográfica mediante una
-            plataforma digital moderna, ágil y fácil de usar para toda la
-            comunidad estudiantil.
-        </p>
-
-        <h3>Visión</h3>
-        <p>
-            Convertirnos en una herramienta de referencia para la gestión de
-            bibliotecas digitales, integrando nuevas funcionalidades que
-            mejoren la experiencia de lectura e investigación.
-        </p>
+    <aside class="about-info info-flex">
+        @await Html.PartialAsync("_InfoCard", new BibliotecaMVC.Models.InfoCard { Icono = "🎯", Titulo = "Misión", Descripcion = "Facilitar el acceso a la información bibliográfica mediante una plataforma digital moderna, ágil y fácil de usar para toda la comunidad estudiantil." })
+        @await Html.PartialAsync("_InfoCard", new BibliotecaMVC.Models.InfoCard { Icono = "🔭", Titulo = "Visión", Descripcion = "Convertirnos en una herramienta de referencia para la gestión de bibliotecas digitales, integrando nuevas funcionalidades que mejoren la experiencia de lectura e investigación." })
     </aside>
 </section>
 
