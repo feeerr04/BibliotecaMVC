@@ -1,24 +1,27 @@
 ﻿using BibliotecaMVC.Models;
+using BibliotecaMVC.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BibliotecaMVC.Controllers
 {
     public class LibrosController : Controller
     {
-        private static List<Libro> _libros = new List<Libro>
+        private readonly IRepositorioLibro _repositorioLibro;
+
+        public LibrosController(IRepositorioLibro repositorioLibro)
         {
-            new Libro { Id = 1, Titulo = "Clean Code", Autor = "Robert C. Martin", Categoria = "Programación", Precio = 35.5m, Disponible = true, ImagenUrl = "clean-code.jpg" },
-            new Libro { Id = 2, Titulo = "The Pragmatic Programmer", Autor = "Andrew Hunt", Categoria = "Programación", Precio = 40.0m, Disponible = false, ImagenUrl = "pragmatic.jpg" }
-        };
+            _repositorioLibro = repositorioLibro;
+        }
 
         public IActionResult Index()
         {
-            return View(_libros);
+            var libros = _repositorioLibro.ObtenerTodos();
+            return View(libros);
         }
 
         public IActionResult Details(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.Id == id);
+            var libro = _repositorioLibro.ObtenerPorId(id);
 
             if (libro == null)
             {
@@ -42,28 +45,14 @@ namespace BibliotecaMVC.Controllers
                 return View(libro);
             }
 
-            if (_libros.Any())
-            {
-                libro.Id = _libros.Max(x => x.Id) + 1;
-            }
-            else
-            {
-                libro.Id = 1;
-            }
-
-            if (string.IsNullOrEmpty(libro.ImagenUrl))
-            {
-                libro.ImagenUrl = "sin-imagen.png";
-            }
-
-            _libros.Add(libro);
+            _repositorioLibro.Agregar(libro);
 
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Edit(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.Id == id);
+            var libro = _repositorioLibro.ObtenerPorId(id);
 
             if (libro == null)
             {
@@ -87,25 +76,14 @@ namespace BibliotecaMVC.Controllers
                 return View(libroEditado);
             }
 
-            var libro = _libros.FirstOrDefault(l => l.Id == id);
-
-            if (libro == null)
-            {
-                return NotFound();
-            }
-
-            libro.Titulo = libroEditado.Titulo;
-            libro.Autor = libroEditado.Autor;
-            libro.Categoria = libroEditado.Categoria;
-            libro.Precio = libroEditado.Precio;
-            libro.Disponible = libroEditado.Disponible;
+            _repositorioLibro.Actualizar(libroEditado);
 
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.Id == id);
+            var libro = _repositorioLibro.ObtenerPorId(id);
 
             if (libro == null)
             {
@@ -119,14 +97,7 @@ namespace BibliotecaMVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var libro = _libros.FirstOrDefault(l => l.Id == id);
-
-            if (libro == null)
-            {
-                return NotFound();
-            }
-
-            _libros.Remove(libro);
+            _repositorioLibro.Eliminar(id);
 
             return RedirectToAction(nameof(Index));
         }
