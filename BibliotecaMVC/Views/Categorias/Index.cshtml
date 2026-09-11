@@ -1,0 +1,77 @@
+﻿@model IEnumerable<BibliotecaMVC.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Listado de Categorías</h2>
+</div>
+
+<a class="btn btn-primary" asp-controller="Categorias" asp-action="Create">Agregar categoría</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var categoria in Model)
+        {
+            <tr>
+                <td>@categoria.ID</td>
+                <td>@categoria.Nombre</td>
+                <td>@categoria.Descripcion</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@categoria.ID">Editar</a>
+
+                    <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@categoria.ID">
+                        Eliminar
+                    </button>
+
+                    <form id="form-eliminar-@categoria.ID" asp-action="Delete" asp-route-id="@categoria.ID" method="post" style="display:none;">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        var mensaje = '@(TempData["SuccessMessage"] ?? "")';
+        if (mensaje) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: mensaje,
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+
+        document.querySelectorAll('.btn-eliminar').forEach(function(boton) {
+            boton.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
+
+                Swal.fire({
+                    title: '¿Está seguro?',
+                    text: 'Esta acción eliminará la categoría de forma permanente.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then(function(resultado) {
+                    if (resultado.isConfirmed) {
+                        document.getElementById('form-eliminar-' + id).submit();
+                    }
+                });
+            });
+        });
+    </script>
+}
