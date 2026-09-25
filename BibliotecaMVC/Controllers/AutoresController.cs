@@ -1,4 +1,4 @@
-﻿using BibliotecaMVC.Models;
+using BibliotecaMVC.Models;
 using BibliotecaMVC.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +49,7 @@ namespace BibliotecaMVC.Controllers
             _context.Autores.Add(autor);
             await _context.SaveChangesAsync();
 
+            TempData["SuccessMessage"] = "Autor agregado correctamente.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -81,19 +82,8 @@ namespace BibliotecaMVC.Controllers
             _context.Autores.Update(autorEditado);
             await _context.SaveChangesAsync();
 
+            TempData["SuccessMessage"] = "Autor actualizado correctamente.";
             return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Delete(int id)
-        {
-            var autor = await _context.Autores.FindAsync(id);
-
-            if (autor == null)
-            {
-                return NotFound();
-            }
-
-            return View(autor);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -108,6 +98,7 @@ namespace BibliotecaMVC.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            TempData["SuccessMessage"] = "Autor eliminado correctamente.";
             return RedirectToAction(nameof(Index));
         }
     }

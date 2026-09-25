@@ -1,32 +1,36 @@
-﻿@model BibliotecaMVC.Models.Autor
+@model BibliotecaMVC.Models.Autor
 
 @{
     ViewData["Title"] = "Editar Autor";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="card" style="max-width: 500px;">
+    <div class="card-body">
+        <h1 class="card-title h3 mb-3">@ViewData["Title"]</h1>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+        <form asp-action="Edit" method="post" class="form-editar" data-entidad="los datos del autor">
+            <input type="hidden" asp-for="Id" />
 
-    <div class="mb-3">
-        <label asp-for="Nombre"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+            <div class="mb-3">
+                <label asp-for="Nombre" class="form-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Nacionalidad" class="form-label"></label>
+                <input asp-for="Nacionalidad" class="form-control" />
+                <span asp-validation-for="Nacionalidad" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FechaNacimiento" class="form-label"></label>
+                <input asp-for="FechaNacimiento" type="date" class="form-control" />
+                <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Guardar cambios</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Nacionalidad"></label>
-        <input asp-for="Nacionalidad" class="form-control" />
-        <span asp-validation-for="Nacionalidad" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="FechaNacimiento"></label>
-        <input asp-for="FechaNacimiento" type="date" class="form-control" />
-        <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Guardar cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+</div>

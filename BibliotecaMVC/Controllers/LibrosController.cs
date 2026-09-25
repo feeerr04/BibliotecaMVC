@@ -1,4 +1,4 @@
-﻿using BibliotecaMVC.Models;
+using BibliotecaMVC.Models;
 using BibliotecaMVC.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +49,56 @@ namespace BibliotecaMVC.Controllers
             _context.Libros.Add(libro);
             await _context.SaveChangesAsync();
 
+            TempData["SuccessMessage"] = "Libro agregado correctamente.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var libro = await _context.Libros.FindAsync(id);
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            return View(libro);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Libro libroEditado)
+        {
+            if (id != libroEditado.Id)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(libroEditado);
+            }
+
+            _context.Libros.Update(libroEditado);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Libro actualizado correctamente.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var libro = await _context.Libros.FindAsync(id);
+
+            if (libro != null)
+            {
+                _context.Libros.Remove(libro);
+                await _context.SaveChangesAsync();
+            }
+
+            TempData["SuccessMessage"] = "Libro eliminado correctamente.";
             return RedirectToAction(nameof(Index));
         }
     }

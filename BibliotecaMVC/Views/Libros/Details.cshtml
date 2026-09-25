@@ -1,25 +1,49 @@
-﻿@model BibliotecaMVC.Models.Libro
+@model BibliotecaMVC.Models.Libro
 
 @{
     ViewData["Title"] = "Detalles del Libro";
 }
 
-<h1>@Model.Titulo</h1>
+<div class="card" style="max-width: 500px;">
+    <img src="~/images/libros/@Model.ImagenUrl" class="card-img-top" style="max-height: 350px; object-fit: cover;" alt="@Model.Titulo" />
+    <div class="card-body">
+        <h1 class="card-title h3">@Model.Titulo</h1>
 
-<dl class="row">
-    <dt>Autor</dt>
-    <dd>@Model.Autor</dd>
+        <dl class="row mb-0">
+            <dt class="col-sm-5">Autor</dt>
+            <dd class="col-sm-7">@Model.Autor</dd>
 
-    <dt>Categoría</dt>
-    <dd>@Model.Categoria</dd>
+            <dt class="col-sm-5">Categoría</dt>
+            <dd class="col-sm-7">@Model.Categoria</dd>
 
-    <dt>Precio</dt>
-    <dd>$@Model.Precio</dd>
+            <dt class="col-sm-5">Precio</dt>
+            <dd class="col-sm-7">$@Model.Precio</dd>
 
-    <dt>Disponibilidad</dt>
-    <dd>@(Model.Disponible ? "Disponible" : "Prestado")</dd>
+            <dt class="col-sm-5">Disponibilidad</dt>
+            <dd class="col-sm-7">
+                @if (Model.Disponible)
+                {
+                    <span class="badge bg-success">Disponible</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Prestado</span>
+                }
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm">Editar</a>
 
-    <img src="~/images/libros/@Model.ImagenUrl" style="max-width: 300px;" class="mb-3" alt="@Model.Titulo" />
-</dl>
+            <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@Model.Id" data-entidad="el libro">
+                Eliminar
+            </button>
 
-<a asp-action="Index" class="btn btn-primary">Volver al listado</a>
+            <form id="form-eliminar-@Model.Id" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:none;">
+                @Html.AntiForgeryToken()
+            </form>
+        </div>
+        <a asp-action="Index" class="btn btn-primary btn-sm">Volver al listado</a>
+    </div>
+</div>

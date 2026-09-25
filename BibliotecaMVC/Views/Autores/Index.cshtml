@@ -1,28 +1,44 @@
-﻿@model IEnumerable<BibliotecaMVC.Models.Autor>
+@model IEnumerable<BibliotecaMVC.Models.Autor>
 @{
     ViewData["Title"] = "Listado de Autores";
 }
 
-<h1>@ViewData["Title"]</h1>
-<p>Hay @Model.Count() autores registrados.</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">@ViewData["Title"]</h1>
+    <a asp-action="Create" class="btn btn-primary">Nuevo autor +</a>
+</div>
 
-<a asp-action="Create" class="btn btn-primary">Nuevo autor +</a>
+<p class="text-muted">Hay @Model.Count() autor(es) registrado(s).</p>
 
 <div class="row">
     @foreach (var autor in Model)
     {
-        <div class="col-md-6">
-            <div class="card mb-3">
+        <div class="col-md-6 col-lg-4">
+            <div class="card mb-3 shadow-sm">
                 <div class="card-body">
-                    <h5>@autor.Nombre</h5>
-                    <h6>@autor.Nacionalidad</h6>
-                    <p>Edad: @(DateTime.Now.Year - autor.FechaNacimiento.Year)</p>
+                    <h5 class="card-title mb-1">@autor.Nombre</h5>
+                    <h6 class="card-subtitle text-muted mb-2">@autor.Nacionalidad</h6>
+                    <p class="mb-3">Edad: <strong>@(DateTime.Now.Year - autor.FechaNacimiento.Year)</strong></p>
 
-                    <a asp-action="Details" asp-route-id="@autor.Id">Ver</a> |
-                    <a asp-action="Edit" asp-route-id="@autor.Id">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@autor.Id">Eliminar</a>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Details" asp-route-id="@autor.Id" class="btn btn-outline-primary btn-sm">Detalles</a>
+                        <a asp-action="Edit" asp-route-id="@autor.Id" class="btn btn-outline-secondary btn-sm">Editar</a>
+
+                        <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@autor.Id" data-entidad="el autor">
+                            Eliminar
+                        </button>
+
+                        <form id="form-eliminar-@autor.Id" asp-action="Delete" asp-route-id="@autor.Id" method="post" style="display:none;">
+                            @Html.AntiForgeryToken()
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     }
 </div>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Aún no hay autores registrados.</p>
+}

@@ -1,20 +1,36 @@
-﻿@model BibliotecaMVC.Models.Autor
+@model BibliotecaMVC.Models.Autor
 
 @{
     ViewData["Title"] = "Detalles del Autor";
 }
 
-<h1>@Model.Nombre</h1>
+<div class="card" style="max-width: 500px;">
+    <div class="card-body">
+        <h1 class="card-title h3">@Model.Nombre</h1>
 
-<dl class="row">
-    <dt>Nacionalidad</dt>
-    <dd>@Model.Nacionalidad</dd>
+        <dl class="row mb-0">
+            <dt class="col-sm-5">Nacionalidad</dt>
+            <dd class="col-sm-7">@Model.Nacionalidad</dd>
 
-    <dt>Fecha de Nacimiento</dt>
-    <dd>@Model.FechaNacimiento.ToString("yyyy-MM-dd")</dd>
+            <dt class="col-sm-5">Fecha de Nacimiento</dt>
+            <dd class="col-sm-7">@Model.FechaNacimiento.ToString("yyyy-MM-dd")</dd>
 
-    <dt>Edad</dt>
-    <dd>@(DateTime.Now.Year - Model.FechaNacimiento.Year)</dd>
-</dl>
+            <dt class="col-sm-5">Edad</dt>
+            <dd class="col-sm-7">@(DateTime.Now.Year - Model.FechaNacimiento.Year)</dd>
+        </dl>
+    </div>
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm">Editar</a>
 
-<a asp-action="Index" class="btn btn-primary">Volver al listado</a>
+            <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@Model.Id" data-entidad="el autor">
+                Eliminar
+            </button>
+
+            <form id="form-eliminar-@Model.Id" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:none;">
+                @Html.AntiForgeryToken()
+            </form>
+        </div>
+        <a asp-action="Index" class="btn btn-primary btn-sm">Volver al listado</a>
+    </div>
+</div>

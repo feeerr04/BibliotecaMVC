@@ -1,47 +1,51 @@
-﻿@model BibliotecaMVC.Models.Libro
+@model BibliotecaMVC.Models.Libro
 
 @{
     ViewData["Title"] = "Crear Libro";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="card" style="max-width: 600px;">
+    <div class="card-body">
+        <h1 class="card-title h3 mb-3">@ViewData["Title"]</h1>
 
-<form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label asp-for="Titulo"></label>
-        <input asp-for="Titulo" class="form-control" />
-        <span asp-validation-for="Titulo" class="text-danger"></span>
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="Titulo" class="form-label"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Autor" class="form-label"></label>
+                <input asp-for="Autor" class="form-control" />
+                <span asp-validation-for="Autor" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Categoria" class="form-label"></label>
+                <input asp-for="Categoria" class="form-control" />
+                <span asp-validation-for="Categoria" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Precio" class="form-label"></label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="Disponible" class="form-check-input" />
+                <label asp-for="Disponible" class="form-check-label"></label>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImagenUrl" class="form-label">Nombre de archivo de imagen</label>
+                <input asp-for="ImagenUrl" class="form-control" placeholder="ejemplo.jpg" />
+                <span asp-validation-for="ImagenUrl" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Crear</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Autor"></label>
-        <input asp-for="Autor" class="form-control" />
-        <span asp-validation-for="Autor" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Categoria"></label>
-        <input asp-for="Categoria" class="form-control" />
-        <span asp-validation-for="Categoria" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Precio"></label>
-        <input asp-for="Precio" class="form-control" />
-        <span asp-validation-for="Precio" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3 form-check">
-        <input asp-for="Disponible" class="form-check-input" />
-        <label asp-for="Disponible" class="form-check-label"></label>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ImagenUrl">Nombre de archivo de imagen</label>
-        <input asp-for="ImagenUrl" class="form-control" placeholder="ejemplo.jpg" />
-        <span asp-validation-for="ImagenUrl" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Crear</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+</div>
