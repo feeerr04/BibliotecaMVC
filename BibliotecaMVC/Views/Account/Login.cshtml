@@ -21,7 +21,7 @@
 
             <div class="mb-3">
                 <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" autocomplete="username" />
+                <input asp-for="Password" class="form-control" autocomplete="password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
@@ -31,7 +31,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-
+            <a asp-action="Register" class="btn btn-secondary">Crear una cuenta</a>
         </form>
     </div>
 </div>
