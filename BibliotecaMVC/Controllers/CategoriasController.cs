@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using BibliotecaMVC.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaMVC.Controllers
 {
-    [Authorize]
+    // Misma matriz de permisos que Libros.
+    [Authorize(Roles = "Admin, Bibliotecario, Usuario")]
     public class CategoriasController : Controller
     {
         private readonly string _connectionString;
@@ -43,6 +44,7 @@ namespace BibliotecaMVC.Controllers
             return View(categorias);
         }
 
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public IActionResult Create()
         {
             return View();
@@ -50,6 +52,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public IActionResult Create(Categoria categoria)
         {
             if (categoria == null || string.IsNullOrWhiteSpace(categoria.Nombre))
@@ -76,6 +79,7 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public IActionResult Edit(int id)
         {
             Categoria? categoria = null;
@@ -114,6 +118,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public IActionResult Edit(Categoria categoria)
         {
             if (categoria == null || string.IsNullOrWhiteSpace(categoria.Nombre))
@@ -143,6 +148,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             using (var conexion = new SqlConnection(_connectionString))

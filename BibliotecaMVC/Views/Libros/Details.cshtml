@@ -34,15 +34,20 @@
     </div>
     <div class="card-footer d-flex justify-content-between align-items-center">
         <div class="d-flex gap-2">
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm">Editar</a>
+            @if (User.IsInRole("Admin") || User.IsInRole("Bibliotecario"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm">Editar</a>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@Model.Id" data-entidad="el libro">
+                    Eliminar
+                </button>
 
-            <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@Model.Id" data-entidad="el libro">
-                Eliminar
-            </button>
-
-            <form id="form-eliminar-@Model.Id" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:none;">
-                @Html.AntiForgeryToken()
-            </form>
+                <form id="form-eliminar-@Model.Id" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:none;">
+                    @Html.AntiForgeryToken()
+                </form>
+            }
         </div>
         <a asp-action="Index" class="btn btn-primary btn-sm">Volver al listado</a>
     </div>

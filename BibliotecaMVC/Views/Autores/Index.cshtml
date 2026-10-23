@@ -5,7 +5,10 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="mb-0">@ViewData["Title"]</h1>
-    <a asp-action="Create" class="btn btn-primary">Nuevo autor +</a>
+    @if (User.IsInRole("Admin") || User.IsInRole("Bibliotecario"))
+    {
+        <a class="btn btn-primary" asp-action="Create">Nuevo Autor +</a>
+    }
 </div>
 
 <p class="text-muted">Hay @Model.Count() autor(es) registrado(s).</p>
@@ -22,15 +25,20 @@
 
                     <div class="d-flex gap-2">
                         <a asp-action="Details" asp-route-id="@autor.Id" class="btn btn-outline-primary btn-sm">Detalles</a>
-                        <a asp-action="Edit" asp-route-id="@autor.Id" class="btn btn-outline-secondary btn-sm">Editar</a>
-
-                        <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@autor.Id" data-entidad="el autor">
-                            Eliminar
-                        </button>
-
+                        @if (User.IsInRole("Admin") || User.IsInRole("Bibliotecario"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@autor.Id" class="btn btn-outline-secondary btn-sm">Editar</a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@autor.Id" data-entidad="el autor">
+                                Eliminar
+                            </button>
+                        
                         <form id="form-eliminar-@autor.Id" asp-action="Delete" asp-route-id="@autor.Id" method="post" style="display:none;">
                             @Html.AntiForgeryToken()
                         </form>
+                        }
                     </div>
                 </div>
             </div>

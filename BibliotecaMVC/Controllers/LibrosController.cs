@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaMVC.Controllers
 {
-    [Authorize]
+    // Consultar (Index y Details): Admin, Bibliotecario y Usuario.
+    // Agregar y editar: Admin y Bibliotecario. Eliminar: solo Admin.
+    [Authorize(Roles = "Admin, Bibliotecario, Usuario")]
     public class LibrosController : Controller
     {
         private readonly BibliotecaContext _context;
@@ -34,6 +36,7 @@ namespace BibliotecaMVC.Controllers
             return View(libro);
         }
 
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public IActionResult Create()
         {
             return View();
@@ -41,6 +44,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Create(Libro libro)
         {
             if (!ModelState.IsValid)
@@ -55,6 +59,7 @@ namespace BibliotecaMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Edit(int id)
         {
             var libro = await _context.Libros.FindAsync(id);
@@ -69,6 +74,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Edit(int id, Libro libroEditado)
         {
             if (id != libroEditado.Id)
@@ -90,6 +96,7 @@ namespace BibliotecaMVC.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var libro = await _context.Libros.FindAsync(id);

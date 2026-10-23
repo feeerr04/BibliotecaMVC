@@ -1,9 +1,16 @@
-﻿@{
+@{
     ViewData["Title"] = "Acceso denegado";
 }
 
 <div class="text-center">
     <h1 class="text-danger">Acceso denegado</h1>
     <p>No tienes permisos suficientes para acceder a este recurso.</p>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <p class="text-muted">
+            Has iniciado sesión como <strong>@User.Identity.Name</strong>.
+            Esta operación está reservada para otro rol. Si necesitas acceso, contacta a un administrador.
+        </p>
+    }
     <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Volver al inicio</a>
 </div>

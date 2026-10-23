@@ -2,11 +2,15 @@
 
 @{
     ViewData["Title"] = "Categorías";
+    var puedeGestionar = User.IsInRole("Admin") || User.IsInRole("Bibliotecario");
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Listado de Categorías</h2>
-    <a class="btn btn-primary" asp-controller="Categorias" asp-action="Create">Agregar categoría</a>
+    @if (puedeGestionar)
+    {
+        <a class="btn btn-primary" asp-controller="Categorias" asp-action="Create">Agregar categoría</a>
+    }
 </div>
 
 <table class="table table-striped align-middle">
@@ -15,7 +19,10 @@
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th class="text-end">Acciones</th>
+            @if (puedeGestionar)
+            {
+                <th class="text-end">Acciones</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -25,17 +32,23 @@
                 <td>@categoria.ID</td>
                 <td>@categoria.Nombre</td>
                 <td>@categoria.Descripcion</td>
-                <td class="text-end">
-                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@categoria.ID">Editar</a>
+                @if (puedeGestionar)
+                {
+                    <td class="text-end">
+                        <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@categoria.ID">Editar</a>
 
-                    <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@categoria.ID" data-entidad="la categoría">
-                        Eliminar
-                    </button>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button type="button" class="btn btn-danger btn-sm btn-eliminar" data-id="@categoria.ID" data-entidad="la categoría">
+                                Eliminar
+                            </button>
 
-                    <form id="form-eliminar-@categoria.ID" asp-action="Delete" asp-route-id="@categoria.ID" method="post" style="display:none;">
-                        @Html.AntiForgeryToken()
-                    </form>
-                </td>
+                            <form id="form-eliminar-@categoria.ID" asp-action="Delete" asp-route-id="@categoria.ID" method="post" style="display:none;">
+                                @Html.AntiForgeryToken()
+                            </form>
+                        }
+                    </td>
+                }
             </tr>
         }
     </tbody>
