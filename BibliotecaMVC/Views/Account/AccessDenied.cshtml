@@ -1,16 +1,25 @@
+@using BibliotecaMVC.Models
+
 @{
     ViewData["Title"] = "Acceso denegado";
+
+    var rol = User.IsInRole("Admin") ? "Admin"
+            : User.IsInRole("Bibliotecario") ? "Bibliotecario"
+            : User.IsInRole("Usuario") ? "Usuario"
+            : null;
+
+    var vm = new PaginaMensajeViewModel
+    {
+        Icono = "lock",
+        Color = "warning",
+        Codigo = "403",
+        Titulo = "Acceso denegado",
+        Mensaje = "No tienes permisos suficientes para acceder a este recurso.",
+        Detalle = User.Identity?.IsAuthenticated == true
+            ? $"Has iniciado sesión como {User.Identity.Name}" + (rol != null ? $" con el rol {rol}" : "") + ". Esta operación está reservada para otro rol; si la necesitas, contacta a un administrador."
+            : "Inicia sesión con una cuenta autorizada para continuar."
+    };
 }
 
-<div class="text-center">
-    <h1 class="text-danger">Acceso denegado</h1>
-    <p>No tienes permisos suficientes para acceder a este recurso.</p>
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        <p class="text-muted">
-            Has iniciado sesión como <strong>@User.Identity.Name</strong>.
-            Esta operación está reservada para otro rol. Si necesitas acceso, contacta a un administrador.
-        </p>
-    }
-    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Volver al inicio</a>
-</div>
+<partial name="_PaginaMensaje" model="vm" />
+@await Component.InvokeAsync("AccesosRapidos")

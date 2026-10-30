@@ -69,12 +69,24 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+// Manejo centralizado de errores: en producción se muestra la página personalizada (/Home/Error).
+// En desarrollo se conserva la página detallada de excepciones, salvo que en appsettings se active
+// "MostrarPaginaErrorPersonalizada": true para probar la página personalizada.
+var usarPaginaErrorPersonalizada = builder.Configuration.GetValue<bool>("MostrarPaginaErrorPersonalizada");
+
+if (!app.Environment.IsDevelopment() || usarPaginaErrorPersonalizada)
 {
     app.UseExceptionHandler("/Home/Error");
+}
+
+if (!app.Environment.IsDevelopment())
+{
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// Páginas amigables para códigos como 404 (recurso no encontrado).
+app.UseStatusCodePagesWithReExecute("/Home/Error", "?codigo={0}");
 
 app.UseHttpsRedirection();
 app.UseRouting();

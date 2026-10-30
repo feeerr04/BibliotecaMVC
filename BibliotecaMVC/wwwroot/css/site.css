@@ -307,3 +307,46 @@ body {
     flex-direction: column;
     gap: 20px;
 }
+/* =====================================
+    PÁGINAS DE ERROR / ACCESO DENEGADO
+======================================== */
+
+.estado-pagina {
+    max-width: 560px;
+    margin: 48px auto 0;
+    padding: 40px 32px;
+    background: var(--color-blanco);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+.estado-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    margin-bottom: 8px;
+}
+
+.estado-danger {
+    background: #fde8ea;
+    color: #dc3545;
+}
+
+.estado-warning {
+    background: #fff4d6;
+    color: #b7791f;
+}
+
+.estado-codigo {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin: 8px 0 12px;
+    letter-spacing: 2px;
+}
+
+.estado-texto-danger { color: #dc3545; }
+.estado-texto-warning { color: #d99a1e; }
