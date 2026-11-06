@@ -1,4 +1,4 @@
-using BibliotecaMVC.Models;
+﻿using BibliotecaMVC.Models;
 using BibliotecaMVC.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +17,19 @@ namespace BibliotecaMVC.Controllers
         {
             _context = context;
             _logger = logger;
+        }
+
+        // Nombre del usuario autenticado. Es seguro en pruebas unitarias, donde el
+        // controlador se crea sin HttpContext y User puede ser null.
+        private string UsuarioActual => User?.Identity?.Name ?? "anónimo";
+
+        // TempData es null cuando el controlador se crea sin HttpContext (pruebas unitarias).
+        private void GuardarMensajeExito(string mensaje)
+        {
+            if (TempData != null)
+            {
+                TempData["SuccessMessage"] = mensaje;
+            }
         }
 
         public async Task<IActionResult> Index()
@@ -71,7 +84,7 @@ namespace BibliotecaMVC.Controllers
         [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Create(Autor autor)
         {
-            _logger.LogInformation("El usuario {Usuario} intenta crear un nuevo autor con nombre {AutorNombre}", User.Identity?.Name, autor.Nombre);
+            _logger.LogInformation("El usuario {Usuario} intenta crear un nuevo autor con nombre {AutorNombre}", UsuarioActual, autor.Nombre);
 
             if (!ModelState.IsValid)
             {
@@ -86,7 +99,7 @@ namespace BibliotecaMVC.Controllers
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Autor creado correctamente con identificador {AutorId}", autor.Id);
-                TempData["SuccessMessage"] = "Autor agregado correctamente.";
+                GuardarMensajeExito("Autor agregado correctamente.");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -125,12 +138,12 @@ namespace BibliotecaMVC.Controllers
         [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Edit(int id, Autor autorEditado)
         {
-            _logger.LogInformation("El usuario {Usuario} intenta editar el autor con identificador {AutorId}", User.Identity?.Name, id);
+            _logger.LogInformation("El usuario {Usuario} intenta editar el autor con identificador {AutorId}", UsuarioActual, id);
 
             if (id != autorEditado.Id)
             {
                 _logger.LogWarning("El identificador de la ruta ({RutaId}) no coincide con el del autor enviado ({AutorId})", id, autorEditado.Id);
-                return NotFound();
+                return BadRequest();
             }
 
             if (!ModelState.IsValid)
@@ -142,11 +155,17 @@ namespace BibliotecaMVC.Controllers
 
             try
             {
+                if (!await _context.Autores.AnyAsync(e => e.Id == id))
+                {
+                    _logger.LogWarning("No se encontró el autor {Id} al intentar actualizarlo.", id);
+                    return NotFound();
+                }
+
                 _context.Autores.Update(autorEditado);
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Autor {AutorId} actualizado correctamente.", id);
-                TempData["SuccessMessage"] = "Autor actualizado correctamente.";
+                GuardarMensajeExito("Autor actualizado correctamente.");
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException ex)
@@ -162,12 +181,12 @@ namespace BibliotecaMVC.Controllers
             }
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _logger.LogInformation("El usuario {Usuario} intenta eliminar el autor con identificador {AutorId}", User.Identity?.Name, id);
+            _logger.LogInformation("El usuario {Usuario} intenta eliminar el autor con identificador {AutorId}", UsuarioActual, id);
 
             try
             {
@@ -183,7 +202,7 @@ namespace BibliotecaMVC.Controllers
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Autor {AutorId} eliminado correctamente.", id);
-                TempData["SuccessMessage"] = "Autor eliminado correctamente.";
+                GuardarMensajeExito("Autor eliminado correctamente.");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

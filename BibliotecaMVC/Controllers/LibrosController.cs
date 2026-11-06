@@ -1,4 +1,4 @@
-using BibliotecaMVC.Models;
+﻿using BibliotecaMVC.Models;
 using BibliotecaMVC.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +19,19 @@ namespace BibliotecaMVC.Controllers
         {
             _context = context;
             _logger = logger;
+        }
+
+        // Nombre del usuario autenticado. Es seguro en pruebas unitarias, donde el
+        // controlador se crea sin HttpContext y User puede ser null.
+        private string UsuarioActual => User?.Identity?.Name ?? "anónimo";
+
+        // TempData es null cuando el controlador se crea sin HttpContext (pruebas unitarias).
+        private void GuardarMensajeExito(string mensaje)
+        {
+            if (TempData != null)
+            {
+                TempData["SuccessMessage"] = mensaje;
+            }
         }
 
         public async Task<IActionResult> Index()
@@ -73,7 +86,7 @@ namespace BibliotecaMVC.Controllers
         [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Create(Libro libro)
         {
-            _logger.LogInformation("El usuario {Usuario} intenta crear un nuevo libro con título {LibroTitulo}", User.Identity?.Name, libro.Titulo);
+            _logger.LogInformation("El usuario {Usuario} intenta crear un nuevo libro con título {LibroTitulo}", UsuarioActual, libro.Titulo);
 
             if (!ModelState.IsValid)
             {
@@ -88,7 +101,7 @@ namespace BibliotecaMVC.Controllers
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Libro creado correctamente con identificador {LibroId}", libro.Id);
-                TempData["SuccessMessage"] = "Libro agregado correctamente.";
+                GuardarMensajeExito("Libro agregado correctamente.");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -127,12 +140,12 @@ namespace BibliotecaMVC.Controllers
         [Authorize(Roles = "Admin, Bibliotecario")]
         public async Task<IActionResult> Edit(int id, Libro libroEditado)
         {
-            _logger.LogInformation("El usuario {Usuario} intenta editar el libro con identificador {LibroId}", User.Identity?.Name, id);
+            _logger.LogInformation("El usuario {Usuario} intenta editar el libro con identificador {LibroId}", UsuarioActual, id);
 
             if (id != libroEditado.Id)
             {
                 _logger.LogWarning("El identificador de la ruta ({RutaId}) no coincide con el del libro enviado ({LibroId})", id, libroEditado.Id);
-                return NotFound();
+                return BadRequest();
             }
 
             if (!ModelState.IsValid)
@@ -144,11 +157,17 @@ namespace BibliotecaMVC.Controllers
 
             try
             {
+                if (!await _context.Libros.AnyAsync(e => e.Id == id))
+                {
+                    _logger.LogWarning("No se encontró el libro {Id} al intentar actualizarlo.", id);
+                    return NotFound();
+                }
+
                 _context.Libros.Update(libroEditado);
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Libro {LibroId} actualizado correctamente.", id);
-                TempData["SuccessMessage"] = "Libro actualizado correctamente.";
+                GuardarMensajeExito("Libro actualizado correctamente.");
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException ex)
@@ -164,12 +183,12 @@ namespace BibliotecaMVC.Controllers
             }
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _logger.LogInformation("El usuario {Usuario} intenta eliminar el libro con identificador {LibroId}", User.Identity?.Name, id);
+            _logger.LogInformation("El usuario {Usuario} intenta eliminar el libro con identificador {LibroId}", UsuarioActual, id);
 
             try
             {
@@ -185,7 +204,7 @@ namespace BibliotecaMVC.Controllers
                 await _context.SaveChangesAsync();
 
                 _logger.LogInformation("Libro {LibroId} eliminado correctamente.", id);
-                TempData["SuccessMessage"] = "Libro eliminado correctamente.";
+                GuardarMensajeExito("Libro eliminado correctamente.");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
